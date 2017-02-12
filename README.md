@@ -1,6 +1,6 @@
-# Sonatype Nexus3 Docker: sonatype/nexus3
+# Sonatype Nexus3 Docker: marhan/rpi-nexus
 
-A Dockerfile for Sonatype Nexus Repository Manager 3, based on CentOS.
+A Dockerfile for Sonatype Nexus Repository Manager 3, based on Raspbian Jessie.
 
 * [Notes](#notes)
   * [Persistent Data](#persistent-data)
@@ -10,7 +10,7 @@ A Dockerfile for Sonatype Nexus Repository Manager 3, based on CentOS.
 To run, binding the exposed port 8081 to the host.
 
 ```
-$ docker run -d -p 8081:8081 --name nexus sonatype/nexus3
+$ docker run -d -p 8081:8081 --name nexus marhan/rpi-nexus
 ```
 
 To test:
@@ -24,7 +24,7 @@ To (re)build the image:
 Copy the Dockerfile and do the build-
 
 ```
-$ docker build --rm=true --tag=sonatype/nexus3 .
+$ make build
 ```
 
 ## Notes
@@ -46,9 +46,9 @@ process, which runs as UID 200.
 
 * Three environment variables can be used to control the JVM arguments
 
-  * `JAVA_MAX_MEM`, passed as -Xmx.  Defaults to `1200m`.
+  * `JAVA_MAX_MEM`, passed as -Xmx.  Defaults to `800m`.
 
-  * `JAVA_MIN_MEM`, passed as -Xms.  Defaults to `1200m`.
+  * `JAVA_MIN_MEM`, passed as -Xms.  Defaults to `800m`.
 
   * `EXTRA_JAVA_OPTS`.  Additional options can be passed to the JVM via
   this variable.
@@ -56,7 +56,7 @@ process, which runs as UID 200.
   These can be used supplied at runtime to control the JVM:
 
   ```
-  $ docker run -d -p 8081:8081 --name nexus -e JAVA_MAX_MEM=768m sonatype/nexus3
+  $ docker run -d -p 8081:8081 --name nexus -e JAVA_MAX_MEM=768m marhan/rpi-nexus
   ```
 
 * Another environment variable can be used to control the Nexus Context Path
@@ -66,7 +66,7 @@ process, which runs as UID 200.
   This can be supplied at runtime:
 
   ```
-  $ docker run -d -p 8081:8081 --name nexus -e NEXUS_CONTEXT=nexus sonatype/nexus3
+  $ docker run -d -p 8081:8081 --name nexus -e NEXUS_CONTEXT=nexus marhan/rpi-nexus
   ```
 
 ### Persistent Data
@@ -81,7 +81,7 @@ for additional information.
 
   ```
   $ docker volume create --name nexus-data
-  $ docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data sonatype/nexus3
+  $ docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data marhan/rpi-nexus
   ```
 
   2. *Mount a host directory as the volume*.  This is not portable, as it
@@ -91,18 +91,8 @@ for additional information.
 
   ```
   $ mkdir /some/dir/nexus-data && chown -R 200 /some/dir/nexus-data
-  $ docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/nexus-data sonatype/nexus3
+  $ docker run -d -p 8081:8081 --name nexus -v /some/dir/nexus-data:/nexus-data marhan/rpi-nexus
   ```
-
-### Build Args
-
-The Dockerfile contains two build arguments (`NEXUS_VERSION` & `NEXUS_DOWNLOAD_URL`) that can be used to customize what
-version of, and from where, Nexus Repository Manager is downloaded. This is useful mostly for testing purposes as the
-Dockerfile may be dependent on a very specific version of Nexus Repository Manager.
-
-```
-docker build --rm --tag nexus-custom --build-arg NEXUS_VERSION=3.x.y --build-arg NEXUS_DOWNLOAD_URL=http://.../nexus-3.x.y-unix.tar.gz .
-```
 
 ## Getting Help
 
