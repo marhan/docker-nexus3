@@ -1,3 +1,13 @@
+# Not working, yet!
+```
+Java HotSpot(TM) Server VM warning: INFO: os::commit_memory(0x41e00000, 838860800, 0) failed; error='Cannot allocate memory' (errno=12)
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 838860800 bytes for committing reserved memory.
+# An error report file with more information is saved as:
+# /tmp/hs_err_pid8.log
+```
+
 # Sonatype Nexus3 Docker: marhan/rpi-nexus
 
 A Dockerfile for Sonatype Nexus Repository Manager 3, based on Raspbian Jessie.
