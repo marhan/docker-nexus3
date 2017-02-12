@@ -39,9 +39,7 @@ LABEL vendor=Sonatype \
 ARG NEXUS_VERSION=3.2.0-01
 ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz
 
-RUN yum install -y \
-  curl tar \
-  && yum clean all
+RUN apt-get install -y curl tar
 
 # configure java runtime
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
