@@ -39,13 +39,15 @@ LABEL vendor=Sonatype \
 ARG NEXUS_VERSION=3.2.0-01
 ARG NEXUS_DOWNLOAD_URL=https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-unix.tar.gz
 
-RUN apt-get install -y curl tar apt-utils
+RUN apt-get install -y curl tar apt-utils paxctl attr
 
 # configure java runtime
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
   JAVA_VERSION_MAJOR=8 \
   JAVA_VERSION_MINOR=121 \
   JAVA_VERSION_BUILD=13
+
+RUN paxctl -c /usr/lib/jvm/java-8-oracle/jre/bin/java
 
 # configure nexus runtime
 ENV SONATYPE_DIR=/opt/sonatype
@@ -78,8 +80,8 @@ EXPOSE 8081
 USER nexus
 WORKDIR ${NEXUS_HOME}
 
-ENV JAVA_MAX_MEM=800m \
-  JAVA_MIN_MEM=800m \
+ENV JAVA_MAX_MEM=768m \
+  JAVA_MIN_MEM=768m \
   EXTRA_JAVA_OPTS=""
 
 CMD ["bin/nexus", "run"]
