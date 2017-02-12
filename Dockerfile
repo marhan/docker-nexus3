@@ -1,3 +1,19 @@
+# Copyright (c) 2017-present Markus Hanses
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Original License
+#
 # Copyright (c) 2016-present Sonatype, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +28,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM       centos:centos7
+FROM marhan/rpi-java8
 
-MAINTAINER Sonatype <cloud-ops@sonatype.com>
+MAINTAINER Markus Hanses <hanses.markus@gmail.com>
 
 LABEL vendor=Sonatype \
   com.sonatype.license="Apache License, Version 2.0" \
@@ -28,10 +44,10 @@ RUN yum install -y \
   && yum clean all
 
 # configure java runtime
-ENV JAVA_HOME=/opt/java \
+ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
   JAVA_VERSION_MAJOR=8 \
-  JAVA_VERSION_MINOR=112 \
-  JAVA_VERSION_BUILD=15
+  JAVA_VERSION_MINOR=121 \
+  JAVA_VERSION_BUILD=13
 
 # configure nexus runtime
 ENV SONATYPE_DIR=/opt/sonatype
@@ -39,15 +55,6 @@ ENV NEXUS_HOME=${SONATYPE_DIR}/nexus \
   NEXUS_DATA=/nexus-data \
   NEXUS_CONTEXT='' \
   SONATYPE_WORK=${SONATYPE_DIR}/sonatype-work
-
-# install Oracle JRE
-RUN mkdir -p /opt \
-  && curl --fail --silent --location --retry 3 \
-  --header "Cookie: oraclelicense=accept-securebackup-cookie; " \
-  http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/server-jre-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
-  | gunzip \
-  | tar -x -C /opt \
-  && ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} ${JAVA_HOME}
 
 # install nexus
 RUN mkdir -p ${NEXUS_HOME} \
